@@ -1,3 +1,5 @@
+#log 002
+#AI plays flappy bird
 import pygame
 import neat
 import time

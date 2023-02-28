@@ -1,3 +1,6 @@
+#log 003
+#Data scraping a website of its content
+
 # sourcery skip: merge-dict-assign, use-fstring-for-concatenation, use-fstring-for-formatting
 import requests
 from bs4 import BeautifulSoup
