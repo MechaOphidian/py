@@ -48,12 +48,53 @@ class bird:
         #sets a container = to what we put in the array so we can change images
         self.img = self.imgs[0]
 
+    #variable for jump function
     def jump(self):
-        self.vel = 10.5
+        #Define the initial velocity 0x0 is top left corner so use -
+        self.vel = -10.5
+        #Tracks when we last jumped
         self.tick_count = 0
+        #Tracks the position before the jump was initiated
         self.height = self.y
 
     def move(self):
+        #how many times we've moved since last jump
         self.tick_count += 1
-
+        #displacement, how many pixels we move up or down per frame
         d = self.vel*self.tick_count + 1.5*self.tick_count**2
+        #failsafe to prevent velocity going to far up/down
+        if d >= 16:
+            d = 16
+        #makes the jump a bit smoother going up by adjusting the value
+        if d < 0:
+            d -= 2
+        #adds the result of the displacement to our co-ordinates making us move
+        self.y = self.y + d
+        #if our displacement is upwards hold the tilt upwards till the tilt at the apex
+        if d < 0 or self.y < self.height + 50:
+            #if our tilt value is less then max rotation set tilt to max rotation
+            if self.tilt < self.max_rotation:
+                    self.tilt = self.max_rotation
+            else:
+            #if our tilt value is greater than -90
+                if self.tilt > -90:
+                    #we want to tilt all the way down as the bird is freefalling
+                    self.tilt -= self.rot_vel
+
+    #Function to change the animations frame
+    def draw(self, win):
+        self.img_count += 1
+
+        if self.img_count < self.animation_time:
+            self.img = self.imgs[0]
+        elif self.img_count < self.animation_time*2:
+            self.img = self.imgs[1]
+        elif self.img_count < self.animation_time*3:
+            self.img = self.imgs[2]
+        elif self.img_count < self.animation_time*4:
+            self.img = self.imgs[1]
+        elif self.img_count == self.animation_time*4 + 1:
+            self.img = self.imgs[0]
+            self.img_count = 0
+
+    #Stopped @8:37 https://www.youtube.com/watch?v=ps55secj7iU&list=PLzMcBGfZo4-lwGZWXz5Qgta_YNX3_vLS2&index=2
